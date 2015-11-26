@@ -4,6 +4,7 @@ import subprocess
 import sys
 import os
 
+
 class Project(object):
 
     def __init__(self):
@@ -18,12 +19,11 @@ class Project(object):
         self.install()
         self.mod_settings()
         self.replace_settings()
-        #self.sync()
         self.make_requirements()
-        
+
     def set_python(self):
         python = raw_input('Python Version (python2 or python3): ')
-        python = python.lower().replace(' ','')[0:7]
+        python = python.lower().replace(' ', '')[0:7]
         if python == 'python2' or python == 'python3':
             return python
         else:
@@ -31,14 +31,14 @@ class Project(object):
 
     def install(self):
         if self.python == 'python2':
-            subprocess.call(['virtualenv', 'venv'])
-            subprocess.call(['venv/bin/pip', 'install', 'django'])
+            subprocess.call(['virtualenv', 'env'])
+            subprocess.call(['env/bin/pip', 'install', 'django'])
         elif self.python == 'python3':
-            subprocess.call(['virtualenv', '-p', 'python3', 'venv'])
-            subprocess.call(['venv/bin/pip3', 'install', 'django'])
+            subprocess.call(['virtualenv', '-p', 'python3', 'env'])
+            subprocess.call(['env/bin/pip3', 'install', 'django'])
         subprocess.call(
             [
-                'venv/bin/django-admin',
+                'env/bin/django-admin',
                 'startproject',
                 self.project_site,
                 '.'
@@ -46,7 +46,7 @@ class Project(object):
         )
         subprocess.call(
             [
-                'venv/bin/django-admin',
+                'env/bin/django-admin',
                 'startapp',
                 self.project_app
             ]
@@ -74,8 +74,8 @@ class Project(object):
                 f2.write(
                     "STATICFILES_DIRS = [\n"
                     "    ("
-                    "os.path.join(BASE_DIR, \'"
-                    + self.project_site +
+                    "os.path.join(BASE_DIR, \'" +
+                    self.project_site +
                     "\', \'static\'))\n"
                     "]\n"
                 )
@@ -91,8 +91,8 @@ class Project(object):
                 f2.write(
                     (
                         "    sys.path.insert"
-                        "(0, (BASE_DIR + \'/"
-                        + self.project_site +
+                        "(0, (BASE_DIR + \'/" +
+                        self.project_site +
                         "/\'))\n"
                     )
                 )
@@ -100,25 +100,25 @@ class Project(object):
                 with open(self.settings_pro, 'w') as f3:
                     f3.write('import site\n')
                     f3.write('import os\n')
-                    f3.write('# venv site packages\n')
+                    f3.write('# env site packages\n')
                     f3.write(
                         (
                             "site.addsitedir(\'/home/" + self.host +
                             "/webapps/" + self.project +
                             "/" + self.project +
-                            "/venv/lib/python2.7/site-packages\')"
+                            "/env/lib/python2.7/site-packages\')"
                             "\n"
                         )
                     )
                     f3.write('\n')
-                    f3.write('# venv activate this\n')
+                    f3.write('# env activate this\n')
                     f3.write(
                         (
                             "activate_this = os.path.expanduser(\'"
                             "/home/" + self.host +
                             "/webapps/" + self.project +
                             "/" + self.project +
-                            "/venv/bin/"
+                            "/env/bin/"
                             "activate_this.py\')\n"
                         )
                     )
@@ -154,7 +154,7 @@ class Project(object):
         subprocess.call(['rm', (self.project + '/project.db')])
         subprocess.call(
             [
-                'venv/bin/python',
+                'env/bin/python',
                 (self.project + '/manage.py'),
                 'migrate'
             ]
@@ -162,14 +162,14 @@ class Project(object):
         print 'Migrated'
         subprocess.call(
             [
-                'venv/bin/python',
+                'env/bin/python',
                 (self.project + '/manage.py'),
                 'createsuperuser'
             ]
         )
 
     def make_requirements(self):
-        os.system('venv/bin/pip freeze > ./requirements.txt')
+        os.system('env/bin/pip freeze > ./requirements.txt')
         subprocess.call(
             [
                 'cp',
@@ -191,8 +191,9 @@ class BaseException(Exception):
         super(BaseException, self).__init__(message)
         self.errors = errors
 
+
 class PythonVersionFail(BaseException):
     pass
-    
+
 Project()
 
