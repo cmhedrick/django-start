@@ -16,6 +16,7 @@ An open source automation tool to help build the perfect enviroment for a Django
 ### Work Flow
 
 Ideally in the manor of steps:
+
 1. You have cloned this repo or downloaded the script.
 2. Create your project directory 
  ```sh 
