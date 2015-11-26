@@ -19,15 +19,15 @@ Ideally in the manor of steps:
 
 1. You have cloned this repo or downloaded the script.
 2. Create your project directory 
- ```sh 
+ ``` 
 $ mkdir yourproject 
 ```
-3. change into that directory
-```sh 
+3. change into that directory 
+``` 
 $ cd yourproject 
 ```
-4. copy the `django-start.py` file into your project directory
-```sh 
+4. copy the `django-start.py` file into your project directory 
+```
 $ cp [path to]/django-start.py .
 ```
 5. Run the script
